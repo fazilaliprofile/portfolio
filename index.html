@@ -40,48 +40,10 @@ function toggle(){const x=document.querySelector('.links');const open=x.style.di
 const nav=document.querySelector('.nav');window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>20),{passive:true});
 const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');if(e.target.classList.contains('coverage'))e.target.querySelectorAll('.fill').forEach(f=>f.style.width=f.style.getPropertyValue('--w'));if(e.target.classList.contains('stats'))e.target.querySelectorAll('[data-count]').forEach(el=>{const end=+el.dataset.count;let start=0;const step=Math.max(1,Math.ceil(end/35));const tick=()=>{start=Math.min(end,start+step);el.textContent=start;if(start<end)requestAnimationFrame(tick)};tick()});observer.unobserve(e.target)}}),{threshold:.14});document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 if(!matchMedia('(prefers-reduced-motion: reduce)').matches){document.querySelectorAll('.tilt').forEach(card=>{card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(900px) rotateX(${(-y*5).toFixed(2)}deg) rotateY(${(x*5).toFixed(2)}deg) translateY(-4px)`});card.addEventListener('pointerleave',()=>card.style.transform='')})}
-
-/* High-graphics particle portrait: scattered particles converge into the uploaded photo. */
-(()=>{
- const canvas=document.getElementById('particleCanvas'),stage=canvas.parentElement,status=document.getElementById('particleStatus');
- const ctx=canvas.getContext('2d',{alpha:true});
- const img=new Image();
- img.src='assets/WhatsApp Image 2026-09-16 at 2.07.32 PM.jpeg';
- let particles=[],targets=[],w=0,h=0,dpr=1,ready=false,startTime=0,mouse={x:0,y:0,active:false};
- const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
- function resize(){dpr=Math.min(devicePixelRatio||1,2);const r=stage.getBoundingClientRect();w=Math.max(280,r.width);h=Math.max(360,r.height);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);canvas.style.width=w+'px';canvas.style.height=h+'px';ctx.setTransform(dpr,0,0,dpr,0,0);if(ready)buildTargets()}
- function buildTargets(){
-   const off=document.createElement('canvas'),ox=off.getContext('2d',{willReadFrequently:true});
-   const maxW=w*.82,maxH=h*.82,scale=Math.min(maxW/img.naturalWidth,maxH/img.naturalHeight);const iw=Math.max(1,Math.floor(img.naturalWidth*scale)),ih=Math.max(1,Math.floor(img.naturalHeight*scale));
-   off.width=iw;off.height=ih;ox.drawImage(img,0,0,iw,ih);const data=ox.getImageData(0,0,iw,ih).data;
-   const step=Math.max(3,Math.floor(Math.min(iw,ih)/125));targets=[];
-   for(let y=0;y<ih;y+=step)for(let x=0;x<iw;x+=step){const i=(y*iw+x)*4,a=data[i+3],lum=(data[i]+data[i+1]+data[i+2])/3;if(a>70&&lum<247){const px=(w-iw)/2+x,py=(h-ih)/2+y;targets.push({x:px,y:py,r:data[i],g:data[i+1],b:data[i+2],a:a/255})}}
-   if(!particles.length){particles=targets.map((t,i)=>({x:Math.random()*w,y:Math.random()*h,vx:0,vy:0,tx:t.x,ty:t.y,r:t.r,g:t.g,b:t.b,a:t.a,size:Math.random()*1.25+.65,phase:Math.random()*Math.PI*2}));}
-   else {particles=targets.map((t,i)=>{const p=particles[i%particles.length]||{x:Math.random()*w,y:Math.random()*h};return {...p,tx:t.x,ty:t.y,r:t.r,g:t.g,b:t.b,a:t.a,size:p.size||1}})}
- }
- function animate(now){
-   ctx.clearRect(0,0,w,h);const elapsed=now-startTime,formation=Math.min(1,elapsed/2600),ease=1-Math.pow(1-formation,4),settled=formation>=1;
-   if(status)status.textContent=settled?'PORTRAIT FORMED':'FORMING PORTRAIT';
-   const mx=mouse.active?mouse.x:w/2,my=mouse.active?mouse.y:h/2;
-   for(const p of particles){
-     const scatterX=Math.sin(p.phase)*8,scatterY=Math.cos(p.phase)*8;
-     const targetX=p.tx+scatterX*(1-ease),targetY=p.ty+scatterY*(1-ease);
-     const dx=targetX-p.x,dy=targetY-p.y;
-     p.vx=p.vx*.88+dx*(settled?.018:.045);p.vy=p.vy*.88+dy*(settled?.018:.045);
-     if(settled){const depth=(p.ty/h-.5);p.vx+=((mx-w/2)/w)*depth*.035;p.vy+=((my-h/2)/h)*.025;}
-     p.x+=p.vx;p.y+=p.vy;
-     const glow=settled?1.0+.22*Math.sin(now*.003+p.phase):1;
-     const alpha=Math.min(1,p.a*(.58+ease*.42));
-     ctx.beginPath();ctx.fillStyle=`rgba(${p.r},${p.g},${p.b},${alpha})`;ctx.arc(p.x,p.y,p.size*glow,0,Math.PI*2);ctx.fill();
-     if(settled&&p.size>1.3){ctx.beginPath();ctx.fillStyle=`rgba(66,165,255,${.055+Math.sin(now*.002+p.phase)*.025})`;ctx.arc(p.x,p.y,p.size*3.5,0,Math.PI*2);ctx.fill()}
-   }
-   if(!reduced)requestAnimationFrame(animate);
- }
- img.onload=()=>{ready=true;resize();startTime=performance.now();if(reduced){startTime=performance.now()-3500;animate(startTime)}else requestAnimationFrame(animate)};
- img.onerror=()=>{if(status)status.textContent='IMAGE NOT FOUND'};
- new ResizeObserver(resize).observe(stage);
- stage.addEventListener('pointermove',e=>{const r=stage.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;mouse.active=true});stage.addEventListener('pointerleave',()=>mouse.active=false);
- window.addEventListener('resize',resize,{passive:true});
-})();
+(()=>{const canvas=document.getElementById('particleCanvas'),stage=canvas.parentElement,status=document.getElementById('particleStatus'),ctx=canvas.getContext('2d',{alpha:true}),img=new Image();img.src='WhatsApp Image 2026-09-16 at 2.07.32 PM.jpeg';let particles=[],w=0,h=0,dpr=1,ready=false,startTime=0,mouse={x:0,y:0,active:false};const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function resize(){dpr=Math.min(devicePixelRatio||1,2);const r=stage.getBoundingClientRect();w=Math.max(280,r.width);h=Math.max(360,r.height);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);canvas.style.width=w+'px';canvas.style.height=h+'px';ctx.setTransform(dpr,0,0,dpr,0,0);if(ready)buildTargets()}
+function buildTargets(){const off=document.createElement('canvas'),ox=off.getContext('2d',{willReadFrequently:true}),maxW=w*.82,maxH=h*.82,scale=Math.min(maxW/img.naturalWidth,maxH/img.naturalHeight),iw=Math.max(1,Math.floor(img.naturalWidth*scale)),ih=Math.max(1,Math.floor(img.naturalHeight*scale));off.width=iw;off.height=ih;ox.drawImage(img,0,0,iw,ih);const data=ox.getImageData(0,0,iw,ih).data,step=Math.max(3,Math.floor(Math.min(iw,ih)/125));targets=[];for(let y=0;y<ih;y+=step)for(let x=0;x<iw;x+=step){const i=(y*iw+x)*4,a=data[i+3],lum=(data[i]+data[i+1]+data[i+2])/3;if(a>70&&lum<247)targets.push({x:(w-iw)/2+x,y:(h-ih)/2+y,r:data[i],g:data[i+1],b:data[i+2],a:a/255})}if(!particles.length)particles=targets.map(t=>({x:Math.random()*w,y:Math.random()*h,vx:0,vy:0,tx:t.x,ty:t.y,r:t.r,g:t.g,b:t.b,a:t.a,size:Math.random()*1.25+.65,phase:Math.random()*Math.PI*2}));else particles=targets.map((t,i)=>{const p=particles[i%particles.length]||{x:Math.random()*w,y:Math.random()*h};return {...p,tx:t.x,ty:t.y,r:t.r,g:t.g,b:t.b,a:t.a,size:p.size||1}})}
+function animate(now){ctx.clearRect(0,0,w,h);const elapsed=now-startTime,formation=Math.min(1,elapsed/2600),ease=1-Math.pow(1-formation,4),settled=formation>=1;if(status)status.textContent=settled?'PORTRAIT FORMED':'FORMING PORTRAIT';const mx=mouse.active?mouse.x:w/2,my=mouse.active?mouse.y:h/2;for(const p of particles){const targetX=p.tx+Math.sin(p.phase)*8*(1-ease),targetY=p.ty+Math.cos(p.phase)*8*(1-ease),dx=targetX-p.x,dy=targetY-p.y;p.vx=p.vx*.88+dx*(settled?.018:.045);p.vy=p.vy*.88+dy*(settled?.018:.045);if(settled){const depth=p.ty/h-.5;p.vx+=((mx-w/2)/w)*depth*.035;p.vy+=((my-h/2)/h)*.025}p.x+=p.vx;p.y+=p.vy;const glow=settled?1+.22*Math.sin(now*.003+p.phase):1,alpha=Math.min(1,p.a*(.58+ease*.42));ctx.beginPath();ctx.fillStyle=`rgba(${p.r},${p.g},${p.b},${alpha})`;ctx.arc(p.x,p.y,p.size*glow,0,Math.PI*2);ctx.fill();if(settled&&p.size>1.3){ctx.beginPath();ctx.fillStyle=`rgba(66,165,255,${.055+Math.sin(now*.002+p.phase)*.025})`;ctx.arc(p.x,p.y,p.size*3.5,0,Math.PI*2);ctx.fill()}}if(!reduced)requestAnimationFrame(animate)}
+img.onload=()=>{ready=true;resize();startTime=performance.now();if(reduced){startTime=performance.now()-3500;animate(startTime)}else requestAnimationFrame(animate)};img.onerror=()=>{if(status)status.textContent='IMAGE NOT FOUND'};new ResizeObserver(resize).observe(stage);stage.addEventListener('pointermove',e=>{const r=stage.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;mouse.active=true});stage.addEventListener('pointerleave',()=>mouse.active=false);window.addEventListener('resize',resize,{passive:true})})();
 </script>
 </body></html>
