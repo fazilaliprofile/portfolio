@@ -1,0 +1,71 @@
+name: Apply Portfolio Layout Update
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  update-layout:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update portfolio layout
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          # Move section navigation to the top-right and keep the existing theme.
+          s = s.replace(
+              '.side{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:90;display:flex;flex-direction:column;gap:8px}',
+              '.side{position:fixed;right:22px;top:76px;transform:none;z-index:110;display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap;max-width:min(820px,70vw)}'
+          )
+          s = s.replace(
+              '.side button:hover,.side button.active{background:var(--red);border-color:#ff6678;color:#fff;transform:translateX(-4px);box-shadow:0 10px 30px #ff17384d}',
+              '.side button:hover,.side button.active{background:var(--red);border-color:#ff6678;color:#fff;transform:translateY(-2px);box-shadow:0 10px 30px #ff17384d}'
+          )
+
+          # Make portfolio sections part of the front page instead of hidden full-screen panels.
+          s = s.replace(
+              '.hidden{display:none!important}.panel{position:fixed;inset:0;z-index:80;background:#030303f2;backdrop-filter:blur(22px);overflow:auto;padding:100px 0 60px}',
+              '.hidden{display:block!important}.panel{position:relative;inset:auto;z-index:1;background:transparent;backdrop-filter:none;overflow:visible;padding:80px 0 20px;scroll-margin-top:110px;animation:slideDown .45s ease both}.panel + .panel{padding-top:50px}.panel .close{display:none}@keyframes slideDown{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:none}}'
+          )
+
+          # Keep mobile navigation at the top rather than the bottom.
+          s = s.replace(
+              '@media(max-width:850px){.hero-grid,.grid2{grid-template-columns:1fr}.side{right:8px}.side button{padding:9px 10px;font-size:10px}',
+              '@media(max-width:850px){.hero-grid,.grid2{grid-template-columns:1fr}.side{right:8px;top:70px;max-width:calc(100% - 16px)}.side button{padding:9px 10px;font-size:10px}'
+          )
+          s = s.replace(
+              '@media(max-width:600px){.side{top:auto;bottom:12px;left:50%;right:auto;transform:translateX(-50%);flex-direction:row;max-width:95%;overflow:auto;padding:5px}.side button{white-space:nowrap}',
+              '@media(max-width:600px){.side{top:64px;bottom:auto;left:8px;right:8px;transform:none;justify-content:flex-end;max-width:none;overflow:auto;padding:5px}.side button{white-space:nowrap}'
+          )
+
+          # Replace panel-opening behavior with smooth scrolling; sections remain visible.
+          marker = '</body>'
+          script = '''<script>\nfunction openPanel(id){const el=document.getElementById(id);if(el){el.classList.remove('hidden');el.scrollIntoView({behavior:'smooth',block:'start'});}}\nfunction closePanel(){window.scrollTo({top:0,behavior:'smooth'});}\ndocument.addEventListener('DOMContentLoaded',()=>document.querySelectorAll('.panel').forEach(el=>el.classList.remove('hidden')));\n</script>\n'''
+          if 'scrollIntoView({behavior:'smooth',block:'start'})' not in s:
+              s = s.replace(marker, script + marker)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Commit layout changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          if git diff --cached --quiet; then
+            echo 'No layout changes needed.'
+          else
+            git commit -m 'Apply single-page portfolio navigation layout'
+            git push
+          fi
