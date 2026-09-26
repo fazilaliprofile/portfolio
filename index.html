@@ -34,4 +34,9 @@ function openPanel(id){const p=document.getElementById(id);if(!p)return;panels.f
 function closePanel(){panels.forEach(p=>p.classList.add('hidden'));document.querySelectorAll('.side button').forEach(b=>b.classList.remove('active'));window.scrollTo({top:0,behavior:'smooth'});closeMenu()}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePanel();closeMenu()}});
 </script>
+<script>
+function openPanel(id){const el=document.getElementById(id);if(el){el.classList.remove('hidden');el.scrollIntoView({behavior:'smooth',block:'start'});}}
+function closePanel(){window.scrollTo({top:0,behavior:'smooth'});}
+document.addEventListener('DOMContentLoaded',()=>document.querySelectorAll('.panel').forEach(el=>el.classList.remove('hidden')));
+</script>
 </body></html>
