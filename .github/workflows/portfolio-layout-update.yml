@@ -7,6 +7,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: portfolio-index-writes
+  cancel-in-progress: false
+
 jobs:
   update-layout:
     if: github.actor != 'github-actions[bot]'
