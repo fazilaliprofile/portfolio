@@ -18,12 +18,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Apply premium visual layer
+      - name: Repair portfolio interactions and apply premium visual layer
+        shell: python
         run: |
-          python3 - <<'PY'
           from pathlib import Path
+          import re
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
+
+          # Repair the menu trigger if an earlier generated version left a placeholder.
+          s = s.replace('onclick="..."', 'onclick="toggleMenu()"')
+
+          # Remove the later duplicate openPanel/closePanel script that overrides the real menu logic.
+          duplicate = '''<script>
+function openPanel(id){const el=document.getElementById(id);if(el){el.classList.remove('hidden');el.scrollIntoView({behavior:'smooth',block:'start'});}}
+function closePanel(){window.scrollTo({top:0,behavior:'smooth'});}
+document.addEventListener('DOMContentLoaded',()=>document.querySelectorAll('.panel').forEach(el=>el.classList.remove('hidden')));
+</script>'''
+          s = s.replace(duplicate, '')
+
           css = '''
           /* Premium editorial visual layer */
           body{background:radial-gradient(circle at 82% 8%,#ff17382b,transparent 24%),radial-gradient(circle at 10% 55%,#ff17380d,transparent 30%),linear-gradient(180deg,#020202 0%,#080808 48%,#020202 100%)}
@@ -57,16 +70,27 @@ jobs:
           if 'Premium editorial visual layer' not in s:
               s = s.replace('</style>', css + '\n</style>', 1)
           p.write_text(s, encoding='utf-8')
-          PY
 
-      - name: Commit premium layout
+      - name: Verify portfolio repair
+        shell: python
+        run: |
+          from pathlib import Path
+          s = Path('index.html').read_text(encoding='utf-8')
+          assert 'onclick="..."' not in s
+          assert s.count('function openPanel(') == 1
+          assert s.count('function closePanel(') == 1
+          assert 'function toggleMenu(){' in s
+          assert 'id="menuToggle"' in s and 'id="sideMenu"' in s
+          print('Portfolio interaction verification passed.')
+
+      - name: Commit portfolio repair
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add index.html
           if git diff --cached --quiet; then
-            echo 'No premium styling changes needed.'
+            echo 'No portfolio changes needed.'
           else
-            git commit -m 'Apply premium editorial portfolio styling'
+            git commit -m 'Fix portfolio menu interaction override'
             git push
           fi
