@@ -19,16 +19,16 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Update portfolio layout and interactions
+        shell: python
         run: |
-          python3 - <<'PY'
           from pathlib import Path
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
 
-          # Fix a broken placeholder handler that prevents the menu button from working.
+          # Repair the menu trigger directly in the tracked HTML.
           s = s.replace('onclick="..."', 'onclick="toggleMenu()"')
 
-          # Ensure the menu button has a real accessible interaction model.
+          # Add the interaction implementation only once.
           script = '''<script>
           function toggleMenu(){
             const menu=document.getElementById('sideMenu');
@@ -59,10 +59,20 @@ jobs:
           });
           </script>\n'''
           if 'function toggleMenu(){' not in s:
-              s = s.replace('</body>', script + '</body>')
+              s = s.replace('</body>', script + '</body>', 1)
 
           p.write_text(s, encoding='utf-8')
-          PY
+
+      - name: Verify repaired source
+        shell: python
+        run: |
+          from pathlib import Path
+          s = Path('index.html').read_text(encoding='utf-8')
+          assert 'onclick="..."' not in s, 'Broken menu placeholder still exists'
+          assert 'function toggleMenu(){' in s, 'toggleMenu() was not installed'
+          assert 'function closeMenu(){' in s, 'closeMenu() was not installed'
+          assert 'id="menuToggle"' in s and 'id="sideMenu"' in s, 'Menu elements are missing'
+          print('Portfolio interaction verification passed.')
 
       - name: Commit layout changes
         run: |
