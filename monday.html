@@ -26,6 +26,9 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background-ima
 .composer{position:fixed;left:280px;right:0;bottom:0;padding:18px 20px 22px;background:linear-gradient(180deg,#05050500,#050505 35%)}.composer-inner{width:min(850px,94%);margin:auto;display:flex;gap:10px;align-items:flex-end;padding:10px;border:1px solid #333;border-radius:18px;background:#0b0b0bf2;box-shadow:0 20px 70px #000c}.composer textarea{flex:1;resize:none;min-height:48px;max-height:140px;border:0;outline:none;background:transparent;color:#fff;padding:12px;font:14px inherit}.icon{width:44px;height:44px;border:1px solid #303030;background:#101010;color:#ccc;border-radius:12px;cursor:pointer}.send{border-color:#ff5268;background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;font-weight:900}.hint{font-size:10px;color:#65656d;text-align:center;margin-top:7px}
 .typing{display:flex;gap:5px;padding:4px 0}.typing i{width:6px;height:6px;border-radius:50%;background:#777;animation:b .8s infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}@keyframes b{50%{transform:translateY(-4px);opacity:.5}}
 @media(max-width:780px){.app{grid-template-columns:1fr}.sidebar{display:none}.composer{left:0}.header{padding:0 15px}.suggestions{grid-template-columns:1fr}.messages{padding-bottom:170px}}
+
+.mobile-menu{display:none;width:42px;height:42px;border:1px solid #ff5268;background:#101010;color:#fff;border-radius:12px;cursor:pointer;font-size:18px}.mobile-backdrop{display:none;position:fixed;inset:0;background:#0009;z-index:90}.mobile-backdrop.open{display:block}.mobile-menu.open{background:linear-gradient(135deg,var(--red),var(--red2))}
+@media(max-width:780px){.mobile-menu{display:block}.sidebar{position:fixed;left:0;top:0;bottom:0;width:min(300px,88vw);z-index:100;transform:translateX(-105%);transition:transform .25s ease;box-shadow:25px 0 70px #000d}.sidebar.mobile-open{transform:translateX(0)}.header{position:relative;z-index:110}.header-title{min-width:0}.badge{display:none}.composer{z-index:80}}
 </style>
 </head>
 <body>
@@ -41,9 +44,9 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background-ima
     <a class="back" href="index.html">← Back to portfolio</a>
   </div>
 </aside>
-<main class="main">
+<div class="mobile-backdrop" id="mobileBackdrop" onclick="closeMobileMenu()"></div><main class="main">
 <header class="header">
-  <div class="header-title"><span class="orb"></span><strong>MONDAY</strong></div>
+  <div class="header-title"><span class="orb"></span><strong>MONDAY</strong></div><button class="mobile-menu" id="mobileMenu" aria-label="Open MONDAY menu" aria-expanded="false" onclick="toggleMobileMenu()">☰</button>
   <div class="badge">PERSONAL ASSISTANT</div>
 </header>
 <section class="messages" id="messages">
@@ -81,6 +84,10 @@ function addMessage(text,type){const row=document.createElement('div');row.class
 function newChat(){conversation.innerHTML='';document.getElementById('welcome')?.remove();addMessage('New conversation started. What would you like me to do?','assistant');}
 function sendMessage(){const text=input.value.trim();if(!text)return;document.getElementById('welcome')?.remove();addMessage(text,'user');input.value='';setTimeout(()=>addMessage('I’m the MONDAY interface. The next step is connecting this chat to your AI API so I can generate real responses and then add memory, voice, web research and actions.','assistant'),450);}
 function voiceStub(){addMessage('Voice mode is reserved for the next build stage.','assistant');}
+
+function toggleMobileMenu(){const sidebar=document.querySelector('.sidebar');const button=document.getElementById('mobileMenu');const backdrop=document.getElementById('mobileBackdrop');const open=!sidebar.classList.contains('mobile-open');sidebar.classList.toggle('mobile-open',open);backdrop.classList.toggle('open',open);button.classList.toggle('open',open);button.setAttribute('aria-expanded',String(open));button.setAttribute('aria-label',open?'Close MONDAY menu':'Open MONDAY menu')}
+function closeMobileMenu(){const sidebar=document.querySelector('.sidebar');const button=document.getElementById('mobileMenu');const backdrop=document.getElementById('mobileBackdrop');sidebar.classList.remove('mobile-open');backdrop.classList.remove('open');button.classList.remove('open');button.setAttribute('aria-expanded','false');button.setAttribute('aria-label','Open MONDAY menu')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMobileMenu()});
 </script>
 </body>
 </html>
