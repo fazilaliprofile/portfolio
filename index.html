@@ -61,27 +61,15 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;back
 }
 
 .hero-photo{justify-self:center;width:min(380px,100%);aspect-ratio:4/5;border-radius:30px;padding:8px;background:linear-gradient(145deg,#8ab4ff66,#3b82f622 40%,#0d0d0d);box-shadow:0 35px 100px #000c,0 0 90px #3b82f633;transform:translate3d(var(--dx,0),var(--dy,0),0);transition:transform .25s ease-out}.hero-photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 20%;border-radius:23px}@media(max-width:850px){.hero-photo{width:min(300px,80%);justify-self:start}}@media(prefers-reduced-motion:reduce){.hero-photo{transition:none;transform:none}}
-/* CLEAN HERO */
-.hero:before{animation:none;background:radial-gradient(circle at 75% 45%,#3b82f61f,transparent 42%)}
-.hero:after{display:none}
-.hero-grid{gap:64px}
-.hero h1{font-size:clamp(46px,7vw,88px);line-height:.95;letter-spacing:-.05em;text-shadow:none;margin:10px 0 14px}
-.hero h2{font-size:clamp(22px,2.6vw,32px);font-weight:700;margin:0 0 6px;max-width:none}
-.hero-sub{color:var(--red3);font-size:15px;font-weight:700;margin-bottom:20px}
-.hero p{font-size:16px;max-width:500px;margin:0}
-.actions{margin-top:30px}
-.btn{box-shadow:none}.btn:hover{box-shadow:0 10px 25px #3b82f640}
-.hero-photo{padding:0;background:none;border:1px solid #ffffff1f;border-radius:24px;overflow:hidden;box-shadow:0 30px 80px #000a}
-.hero-photo img{border-radius:0}
 .proj-group{margin:42px 0 16px;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--red3)}.proj-group:first-of-type{margin-top:0}.card ul{margin:12px 0 0;padding-left:20px}.role+p{margin-top:10px}
 </style>
 </head>
 <body>
-<header class="top"><a class="brand" href="#" onclick="closePanel();closeMenu()">FAZIL ALI<b>.</b></a></header>
+<header class="top"><a class="brand" href="#" onclick="closePanel();closeMenu()">FAZIL ALI<b>.</b></a><div class="status"><span class="dot"></span>BUSINESS ANALYST · LIVE PROFILE</div></header>
 <button class="menu-toggle" id="menuToggle" aria-label="Open portfolio menu" aria-expanded="false" onclick="toggleMenu()"><span class="hamb"><i></i><i></i><i></i></span></button>
 <div class="menu-backdrop" id="menuBackdrop" onclick="closeMenu()"></div>
 <nav class="side" id="sideMenu" aria-label="Portfolio sections"><button onclick="openPanel('projects')">PROJECTS</button><button onclick="openPanel('about')">ABOUT</button><button onclick="openPanel('experience')">EXPERIENCE</button><button onclick="openPanel('skills')">SKILLS</button><button onclick="openPanel('education')">EDUCATION</button><button onclick="openPanel('certifications')">CERTIFICATIONS</button><button onclick="openPanel('contact')">CONTACT</button></nav>
-<main class="hero"><div class="container hero-grid"><div class="hero-copy"><div class="eyebrow">Hi, I’m</div><h1>FAZIL ALI</h1><h2>Business Analyst</h2><div class="hero-sub">Data &amp; Market Research · Business Development</div><p>Turning business data, market research and analytical insights into informed business decisions.</p><div class="actions"><button class="btn" onclick="openPanel('projects')">Explore My Work →</button><a class="btn alt" href="Fazil_ali_professional_CV.docx" download>Download Resume ↓</a></div></div><div class="hero-photo"><img src="assets/fazil-ali.jpg" alt="Fazil Ali" width="720" height="900"></div></div></main>
+<main class="hero"><div class="hero-scene" aria-hidden="true"><div class="orb one"></div><div class="orb two"></div><div class="ring r1"></div><div class="ring r2"></div><div class="particles"></div></div><div class="container hero-grid"><div class="hero-copy"><div class="eyebrow">Business · Data · Research · Insights</div><h1>FAZIL ALI</h1><h2>Business Analyst | Data &amp; Market Research | Business Development</h2><p>Turning business data, market research and analytical insights into informed business decisions.</p><div class="actions"><button class="btn" onclick="openPanel('projects')">Explore My Work →</button><a class="btn alt" href="Fazil_ali_professional_CV.docx" download>Download Resume ↓</a></div></div><div class="hero-photo"><img src="assets/fazil-ali.jpg" alt="Fazil Ali" width="720" height="900"></div></div></main>
 <script>
 const hero=document.querySelector('.hero');
 if(hero&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;hero.style.setProperty('--rx',(x*5).toFixed(2)+'deg');hero.style.setProperty('--ry',(y*-4).toFixed(2)+'deg');hero.style.setProperty('--dx',(x*10).toFixed(1)+'px');hero.style.setProperty('--dy',(y*10).toFixed(1)+'px');hero.style.setProperty('--mx',(x*8).toFixed(1)+'px');hero.style.setProperty('--my',(y*6).toFixed(1)+'px')});hero.addEventListener('pointerleave',()=>['--rx','--ry','--dx','--dy','--mx','--my'].forEach(v=>hero.style.removeProperty(v)))}
