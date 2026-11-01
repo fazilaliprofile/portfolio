@@ -64,6 +64,31 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;back
 .proj-group{margin:42px 0 16px;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--red3)}.proj-group:first-of-type{margin-top:0}.card ul{margin:12px 0 0;padding-left:20px}.role+p{margin-top:10px}
 .proj-toggle{display:inline-flex;align-items:center;gap:10px}.proj-drawer{margin-top:22px}.proj-arrow{font-size:18px;line-height:1;transition:transform .25s}.proj-toggle.open .proj-arrow{transform:rotate(45deg)}.proj-drawer{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}.proj-drawer.open{grid-template-rows:1fr}.proj-drawer-inner{overflow:hidden;min-height:0}.proj-drawer.open .proj-drawer-inner{padding-bottom:30px}.proj-cards{align-items:stretch}@media(max-width:850px){.proj-cards{grid-template-columns:1fr}}
 .personal-block{margin-top:56px}.personal-block .proj-group{margin:0 0 16px}
+
+/* HERO LAYOUT — same structure as Arham's portfolio (colors/theme/elements unchanged) */
+.hero{display:block;min-height:auto;padding:0}
+.hero-grid{display:grid;grid-template-columns:1.5fr .5fr;align-items:center;gap:35px;padding:150px 0 80px}
+.hero-copy{min-width:0}
+.hero .eyebrow{display:inline-block;border:1px solid #6ea0ff55;border-radius:99px;padding:6px 12px;background:#ffffff0b;color:#fff;font-size:12px;letter-spacing:1px;backdrop-filter:blur(8px)}
+.hero .actions .btn{font-family:inherit;font-size:14px;font-weight:800;line-height:1.2;display:inline-block}
+.hero h1{font-size:clamp(46px,7vw,78px);line-height:1.05;letter-spacing:-2.4px;margin:20px 0 12px}
+.hero h2{font-size:20px;font-weight:600;line-height:1.4;letter-spacing:.3px;margin:0;max-width:none;color:#fff}
+.hero p{font-size:18px;line-height:1.75;max-width:590px;margin:16px 0 0}
+.actions{margin-top:22px}
+.hero-photo{width:200px;max-width:100%;aspect-ratio:1/1;border-radius:30px;padding:6px;justify-self:center;transform:rotate(2deg) translate3d(var(--dx,0),var(--dy,0),0);transition:transform .35s,box-shadow .35s}
+.hero-photo:hover{transform:rotate(0) scale(1.025)}
+.hero-photo img{border-radius:24px;object-position:50% 18%}
+.hero-scene{top:5%}
+@media(max-width:850px){
+ .hero-grid{grid-template-columns:1fr;gap:28px;padding:120px 0 55px}
+ .hero-photo{grid-row:1;width:132px;justify-self:start;border-radius:26px}
+ .hero-photo img{border-radius:21px}
+ .hero h1{letter-spacing:-1.4px}
+ .hero p{font-size:16px}
+ .hero h2{font-size:18px}
+}
+@media(max-width:600px){.hero{padding:0}.hero h1{font-size:46px}}
+@media(prefers-reduced-motion:reduce){.hero-photo,.hero-photo:hover{transform:rotate(2deg)}}
 </style>
 </head>
 <body>
@@ -71,7 +96,7 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;back
 <button class="menu-toggle" id="menuToggle" aria-label="Open portfolio menu" aria-expanded="false" onclick="toggleMenu()"><span class="hamb"><i></i><i></i><i></i></span></button>
 <div class="menu-backdrop" id="menuBackdrop" onclick="closeMenu()"></div>
 <nav class="side" id="sideMenu" aria-label="Portfolio sections"><button onclick="openPanel('projects')">PROJECTS</button><button onclick="openPanel('about')">ABOUT</button><button onclick="openPanel('experience')">EXPERIENCE</button><button onclick="openPanel('skills')">SKILLS</button><button onclick="openPanel('education')">EDUCATION</button><button onclick="openPanel('certifications')">CERTIFICATIONS</button><button onclick="openPanel('contact')">CONTACT</button></nav>
-<main class="hero"><div class="hero-scene" aria-hidden="true"><div class="orb one"></div><div class="orb two"></div><div class="ring r1"></div><div class="ring r2"></div><div class="particles"></div></div><div class="container hero-grid"><div class="hero-copy"><div class="eyebrow">Business · Data · Research · Insights</div><h1>FAZIL ALI</h1><h2>Business Analyst | Data &amp; Market Research | Business Development</h2><p>Turning business data, market research and analytical insights into informed business decisions.</p><div class="actions"><button class="btn" onclick="openPanel('projects')">Explore My Work →</button><a class="btn alt" href="Fazil_ali_professional_CV.docx" download>Download Resume ↓</a></div></div><div class="hero-photo"><img src="assets/fazil-ali.jpg" alt="Fazil Ali" width="720" height="900"></div></div></main>
+<main class="hero"><div class="hero-scene" aria-hidden="true"><div class="orb one"></div><div class="orb two"></div><div class="ring r1"></div><div class="ring r2"></div><div class="particles"></div></div><div class="container hero-grid"><div class="hero-copy"><div class="eyebrow">Business · Data · Research · Insights</div><h1>FAZIL ALI</h1><h2>Business Analyst | Data &amp; Market Research | Business Development</h2><p>Turning business data, market research and analytical insights into informed business decisions.</p><div class="actions"><button class="btn" onclick="openPanel('projects')">Explore My Work →</button><button class="btn alt" onclick="openPanel('contact')">Contact Me</button><a class="btn alt" href="Fazil_ali_professional_CV.docx" download>Download Resume ↓</a></div></div><div class="hero-photo"><img src="assets/fazil-ali.jpg" alt="Fazil Ali" width="720" height="900"></div></div></main>
 <script>
 const hero=document.querySelector('.hero');
 if(hero&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;hero.style.setProperty('--rx',(x*5).toFixed(2)+'deg');hero.style.setProperty('--ry',(y*-4).toFixed(2)+'deg');hero.style.setProperty('--dx',(x*10).toFixed(1)+'px');hero.style.setProperty('--dy',(y*10).toFixed(1)+'px');hero.style.setProperty('--mx',(x*8).toFixed(1)+'px');hero.style.setProperty('--my',(y*6).toFixed(1)+'px')});hero.addEventListener('pointerleave',()=>['--rx','--ry','--dx','--dy','--mx','--my'].forEach(v=>hero.style.removeProperty(v)))}
