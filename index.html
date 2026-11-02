@@ -135,6 +135,105 @@ body:before{opacity:.35;background-size:48px 48px;mask-image:linear-gradient(to 
 .panel{position:relative;transform:translateZ(0)}
 @media(max-width:700px){.hero-scene{inset:-4vh -8vw 0}.hero-copy,.hero-photo{transform:none!important;will-change:auto}}
 @media(prefers-reduced-motion:reduce){.hero-scene,.hero-photo,.hero-copy{transform:none!important;will-change:auto}.hero-scene .orb,.hero-scene .ring{transition:none}}
+
+/* MINIMALIST + BENTO GRID + SOFT GLASS — clean visual refresh */
+:root{
+ --bg:#07090d;--panel:#11151c;--red:#7aaeff;--red2:#477fe0;--red3:#b9d5ff;
+ --text:#f4f7fb;--muted:#aab4c2;--line:#ffffff18;--shadow:0 18px 55px #0006;
+}
+html{scroll-behavior:smooth}
+body{
+ background:#080b10!important;
+ background-image:radial-gradient(ellipse at 15% 0%,#17263b66,transparent 38%),linear-gradient(180deg,#080b10,#0b0f15 55%,#080b10)!important;
+ color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+body:before{background-image:none!important}
+body:after{background:radial-gradient(circle at 50% 10%,transparent 0 48%,#0003 100%)!important}
+.top,.side,.menu-toggle,.card,.dashboard,.chart,.hero-photo,.cert-view{
+ background:rgba(20,26,36,.62)!important;
+ border:1px solid rgba(220,235,255,.12)!important;
+ backdrop-filter:blur(22px) saturate(135%);-webkit-backdrop-filter:blur(22px) saturate(135%);
+ box-shadow:0 16px 50px #0004,inset 0 1px rgba(255,255,255,.045)!important;
+}
+.top{border-radius:18px;padding:12px 78px 12px 18px}
+.brand b,.role,.number,.proj-group,.contact a{color:#a8caff!important}
+.status{color:#9ca8b8}
+.dot{background:#9cc3ff;box-shadow:0 0 12px #8ab4ff55}
+.menu-toggle{border-radius:15px}
+.side{border-radius:20px}
+.side button{background:#ffffff06!important;border-color:#ffffff0d!important;color:#c0cad8!important;box-shadow:none!important}
+.side button:hover,.side button.active{background:#8ab4ff20!important;border-color:#8ab4ff55!important;color:#fff!important;transform:none!important}
+.hero{background:none!important;isolation:isolate}
+.hero:before,.hero:after{animation:none!important;opacity:.45}
+.hero-scene{opacity:.25!important;filter:saturate(.45)}
+.hero-scene .orb,.hero-scene .ring{animation:none!important}
+.hero-grid{gap:clamp(30px,5vw,72px)}
+.hero h1{font-size:clamp(48px,7vw,88px)!important;letter-spacing:-.065em!important;text-shadow:none!important}
+.hero h2{font-weight:600!important;letter-spacing:-.02em!important}
+.hero p{color:#b1bdcc!important}
+.hero .eyebrow{background:#ffffff06!important;border-color:#ffffff16!important;color:#c4d9f8!important}
+.btn{background:#e5efff!important;color:#0a1423!important;border:1px solid #e5efff!important;box-shadow:none!important;border-radius:12px!important}
+.btn:hover{background:#c9dfff!important;transform:translateY(-2px)!important}
+.btn.alt{background:#ffffff08!important;color:#f1f5fb!important;border-color:#ffffff20!important}
+.hero-photo{border-radius:26px!important;background:rgba(255,255,255,.07)!important;box-shadow:0 18px 55px #0005!important}
+.hero-photo img{border-radius:21px!important}
+.panel{padding-top:78px!important}
+.panel + .panel{padding-top:48px!important}
+.panel-head{margin-bottom:24px!important;align-items:end}
+.panel-head h2{font-size:clamp(32px,4.5vw,54px)!important;letter-spacing:-.055em!important}
+.eyebrow{letter-spacing:.14em!important;color:#a8caff!important}
+.card{
+ border-radius:22px!important;padding:clamp(20px,2.5vw,28px)!important;
+ background:linear-gradient(145deg,rgba(25,32,43,.78),rgba(15,20,28,.58))!important;
+ border-color:rgba(220,235,255,.11)!important;
+ box-shadow:0 12px 35px #0003,inset 0 1px #ffffff08!important;
+ transition:transform .22s ease,border-color .22s ease,background .22s ease!important;
+}
+.card:hover{transform:translateY(-3px)!important;border-color:#a8caff35!important;box-shadow:0 18px 45px #0004,inset 0 1px #ffffff0b!important}
+.card h3{letter-spacing:-.025em}
+.card p,.card li{color:#aeb9c8!important}
+.tag{background:#a8caff0d!important;border-color:#a8caff20!important;color:#c7dcff!important;border-radius:999px!important}
+.grid2,.grid3{gap:16px!important}
+.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.proj-cards{grid-template-columns:repeat(12,minmax(0,1fr))!important;gap:16px!important}
+.proj-cards>.card{grid-column:span 4;min-height:100%;display:flex;flex-direction:column}
+.proj-cards>.card:first-child{grid-column:span 7}
+.proj-cards>.card:nth-child(2){grid-column:span 5}
+.proj-cards>.card:nth-child(3){grid-column:span 12}
+.proj-cards .card-proj-btn{margin-top:auto}
+.personal-block{margin-top:24px}
+.proj-drawer{margin-top:14px}
+.proj-cards .proj-drawer.open .proj-drawer-inner{padding-bottom:0}
+.grid2>.card:nth-child(1){min-height:100%}
+.cert-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.cert-card{min-height:180px}
+.timeline{border-left:2px solid #8ab4ff!important}
+.meter{background:#ffffff12}
+.meter b{background:linear-gradient(90deg,#d9e8ff,#78aaff)}
+.process{gap:14px}
+.step,.cert-slot{border-color:#ffffff18!important}
+.cert-view{background:#f8fafc!important}
+.cert-view span{background:#121821!important;color:#c7dcff!important}
+.footer{border-top-color:#ffffff12!important;color:#8f9bad!important}
+@media(max-width:850px){
+ .proj-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .proj-cards>.card,.proj-cards>.card:first-child,.proj-cards>.card:nth-child(2),.proj-cards>.card:nth-child(3){grid-column:span 1}
+ .proj-cards>.card:first-child{grid-column:span 2}
+ .grid3,.cert-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .hero-scene{opacity:.18!important}
+}
+@media(max-width:600px){
+ .proj-cards,.grid2,.grid3,.cert-grid{grid-template-columns:1fr!important}
+ .proj-cards>.card,.proj-cards>.card:first-child,.proj-cards>.card:nth-child(2),.proj-cards>.card:nth-child(3){grid-column:1}
+ .panel{padding-top:66px!important}
+ .panel + .panel{padding-top:38px!important}
+ .hero h1{font-size:46px!important}
+ .card{border-radius:18px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
 </style>
 </head>
 <body>
