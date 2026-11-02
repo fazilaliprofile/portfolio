@@ -162,6 +162,23 @@ body:before{opacity:.35;background-size:48px 48px;mask-image:linear-gradient(to 
 @media(max-width:850px){.glass-bg i{filter:blur(50px)}.card,.dashboard,.top,.side{backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}}
 @media(prefers-reduced-motion:reduce){.glass-bg i{animation:none}.card:after{display:none}}
 
+/* BENTO GRID — mosaic of different-sized glass tiles (desktop); stacks on tablet/mobile */
+@media(min-width:851px){
+ .proj-cards,.cert-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
+ .proj-cards>.card:nth-child(1){grid-column:span 3}.proj-cards>.card:nth-child(2){grid-column:span 3}.proj-cards>.card:nth-child(3){grid-column:span 6}
+ .cert-grid>.card:nth-child(1){grid-column:span 4}.cert-grid>.card:nth-child(2){grid-column:span 2}
+ .cert-grid>.card:nth-child(3){grid-column:span 2}.cert-grid>.card:nth-child(4){grid-column:span 4}
+ .cert-grid>.card:nth-child(5),.cert-grid>.card:nth-child(6){grid-column:span 3}
+ .panel .grid2:has(>.card:nth-child(5)){gap:16px}
+ .panel .grid2:has(>.card:nth-child(5))>.card:nth-child(1){grid-column:1/-1}
+ .panel .grid2:has(>.card:nth-child(5))>.card:nth-child(1) h3{font-size:clamp(22px,2.4vw,30px)}
+}
+@media(min-width:601px) and (max-width:850px){.proj-cards>.card:nth-child(3){grid-column:1/-1}.cert-grid{gap:16px}}
+.card{border-radius:28px}
+.proj-cards>.card:nth-child(1),.cert-grid>.card:nth-child(1){background:linear-gradient(145deg,rgba(96,165,250,.24),rgba(255,255,255,.04) 60%),rgba(12,16,25,.4)}
+.proj-cards>.card:nth-child(3){background:linear-gradient(145deg,rgba(139,92,246,.22),rgba(255,255,255,.04) 60%),rgba(12,16,25,.4)}
+
+@media(min-width:851px){.cert-grid,.proj-cards{align-items:stretch}.cert-grid:has(.proj-drawer.open),.proj-cards:has(.proj-drawer.open){align-items:start}}
 </style>
 </head>
 <body>
