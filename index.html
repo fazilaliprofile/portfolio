@@ -324,6 +324,11 @@ body:before,body:after{display:none!important}
 .stat,.stat:first-child{background-image:linear-gradient(160deg,rgba(255,255,255,.025),transparent 55%)}
 .top{background:rgba(0,0,0,.88)}
 .stats{margin-top:0;padding-top:34px}
+
+/* THREE.JS HERO GLOBE — silver data globe on pure black */
+.hero-globe{position:absolute;right:1%;top:54%;transform:translateY(-50%);width:min(42vw,500px);height:min(42vw,500px);z-index:-1;pointer-events:none;opacity:0;transition:opacity 1.4s ease}
+.hero-globe.ready{opacity:1}
+@media(max-width:850px){.hero-globe{right:50%;transform:translate(50%,0);top:60px;width:96vw;height:96vw;max-width:460px;max-height:460px}.hero-globe.ready{opacity:.5}}
 </style>
 </head>
 <body>
@@ -333,7 +338,7 @@ body:before,body:after{display:none!important}
 <button class="menu-toggle" id="menuToggle" aria-label="Open portfolio menu" aria-expanded="false" onclick="toggleMenu()"><span class="hamb"><i></i><i></i><i></i></span></button>
 <div class="menu-backdrop" id="menuBackdrop" onclick="closeMenu()"></div>
 <nav class="side" id="sideMenu" aria-label="Portfolio sections"><button onclick="openPanel('projects')">PROJECTS</button><button onclick="openPanel('certifications')">CERTIFICATIONS</button><button onclick="openPanel('about')">ABOUT</button><button onclick="openPanel('experience')">EXPERIENCE</button><button onclick="openPanel('skills')">SKILLS</button><button onclick="openPanel('education')">EDUCATION</button><button onclick="openPanel('contact')">CONTACT</button></nav>
-<main class="hero"><div class="hero-scene" aria-hidden="true"><div class="orb one"></div><div class="orb two"></div><div class="ring r1"></div><div class="ring r2"></div><div class="particles"></div></div><div class="container hero-grid"><div class="hero-copy"><div class="eyebrow">Business · Data · Research · Insights</div><h1>FAZIL ALI</h1><h2>Business Analyst | Data &amp; Market Research | Business Development</h2><p>Turning business data, market research and analytical insights into informed business decisions.</p><div class="actions"><button class="btn" onclick="openPanel('projects')">Explore My Work →</button><button class="btn alt" onclick="openPanel('contact')">Contact Me</button><a class="btn alt" href="Fazil_ali_professional_CV.docx" download>Download Resume ↓</a></div></div><div class="hero-photo"><img src="assets/fazil-ali.jpg" alt="Fazil Ali" width="720" height="900"></div></div></main>
+<main class="hero"><div class="hero-scene" aria-hidden="true"></div><div class="hero-globe" id="heroScene" aria-hidden="true"></div><div class="container hero-grid"><div class="hero-copy"><div class="eyebrow">Business · Data · Research · Insights</div><h1>FAZIL ALI</h1><h2>Business Analyst | Data &amp; Market Research | Business Development</h2><p>Turning business data, market research and analytical insights into informed business decisions.</p><div class="actions"><button class="btn" onclick="openPanel('projects')">Explore My Work →</button><button class="btn alt" onclick="openPanel('contact')">Contact Me</button><a class="btn alt" href="Fazil_ali_professional_CV.docx" download>Download Resume ↓</a></div></div><div class="hero-photo"><img src="assets/fazil-ali.jpg" alt="Fazil Ali" width="720" height="900"></div></div></main>
 <script>
 const hero=document.querySelector('.hero');
 if(hero&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;hero.style.setProperty('--rx',(x*5).toFixed(2)+'deg');hero.style.setProperty('--ry',(y*-4).toFixed(2)+'deg');hero.style.setProperty('--dx',(x*10).toFixed(1)+'px');hero.style.setProperty('--dy',(y*10).toFixed(1)+'px');hero.style.setProperty('--mx',(x*8).toFixed(1)+'px');hero.style.setProperty('--my',(y*6).toFixed(1)+'px')});hero.addEventListener('pointerleave',()=>['--rx','--ry','--dx','--dy','--mx','--my'].forEach(v=>hero.style.removeProperty(v)))}
@@ -429,4 +434,5 @@ document.addEventListener('DOMContentLoaded',()=>{
  if(fine&&!reduce){d.querySelectorAll('.card,.stat,.asc-tile').forEach(el=>{el.classList.add('spot');el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect();el.style.setProperty('--sx',(e.clientX-r.left)+'px');el.style.setProperty('--sy',(e.clientY-r.top)+'px')})})}
 })();
 </script>
+<script type="module" src="assets/hero-globe.js"></script>
 </body></html>
